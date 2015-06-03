@@ -1,0 +1,25 @@
+{
+  "name": "getJSON",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getJSON.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aws"
+  ],
+  "author": "azu",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk": "^2.1.32",
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-install": "^0.4.0",
+    "gulp-zip": "^3.0.2",
+    "run-sequence": "^1.1.0"
+  },
+  "dependencies": {
+    "es6-promise": "^2.1.1"
+  }
+}
