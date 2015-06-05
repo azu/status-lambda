@@ -43,7 +43,7 @@ exports.handler = function (event, context) {
             key: "status.json",
             body: JSON.stringify(response)
         }).then(function () {
-            context.done("write status.json. Success！");
+            context.done(null, "write status.json. Success！");
         });
     }).catch(function (error) {
         context.done(error);
