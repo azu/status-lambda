@@ -13,7 +13,6 @@ function invokeGetJSON() {
             if (error) {
                 return reject(error);
             }
-            console.log("invoke getJSON");
             resolve(response);
         });
     });

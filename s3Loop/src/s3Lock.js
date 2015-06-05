@@ -20,7 +20,7 @@ function isLockAsync(bucketName) {
                 return;
             }
             if (data) {
-                resolve(true);
+                resolve(JSON.parse(data));
             }
         });
     });
@@ -31,7 +31,7 @@ function lockAsync(bucketName) {
             endpoint: endpoint
         });
         var lockData = {
-            time: Date.now()
+            lastLockTime: Date.now()
         };
         s3bucket.putObject({
             Bucket: bucketName,
