@@ -3,6 +3,7 @@
 var http = require("http");
 var Promise = require("es6-promise").Promise;
 var AWS = require("aws-sdk");
+var endpoint = new AWS.Endpoint('s3-us-west-2.amazonaws.com');
 AWS.config.region = 'us-west-2';
 function getURL(URL) {
     return new Promise(function (resolve, reject) {
@@ -35,13 +36,35 @@ function uploadS3(bucketName, params) {
         });
     });
 }
+function deleteLock(bucketName) {
+    return new Promise(function (resolve, reject) {
+        var s3bucket = new AWS.S3({
+            endpoint: endpoint
+        });
+        var params = {
+            Bucket: bucketName, /* required */
+            Key: "lock.lock" /* required */
+        };
+        s3bucket.deleteObject(params, function (error, data) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(data);
+            }
+        });
+    });
+}
 
 exports.handler = function (event, context) {
     var time = Date.now();
+    var bucketName = "lambda2rest";
     getURL("http://httpbin.org/get?time=" + time).then(function (response) {
-        return uploadS3("lambda2rest", {
+        return uploadS3(bucketName, {
             key: "status.json",
             body: JSON.stringify(response)
+        }).then(function () {
+            console.log("delete lock");
+            return deleteLock(bucketName);
         }).then(function () {
             context.done(null, "write status.json. Success！");
         });
