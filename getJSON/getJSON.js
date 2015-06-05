@@ -61,7 +61,7 @@ exports.handler = function (event, context) {
     getURL("http://httpbin.org/get?time=" + time).then(function (response) {
         return uploadS3(bucketName, {
             key: "status.json",
-            body: JSON.stringify(response)
+            body: response
         }).then(function () {
             console.log("delete lock");
             return deleteLock(bucketName);

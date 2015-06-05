@@ -20,5 +20,7 @@ function getURL(URL) {
 
 var div = document.getElementById("js-status");
 getURL("https://s3-us-west-2.amazonaws.com/lambda2rest/status.json").then(function (response) {
-    div.textContent = JSON.parse(response);
+    var data = JSON.parse(response);
+    var time = Date.now() - data.args.time;
+    div.textContent = time + " ms before";
 }).catch(console.log.bind(console));
