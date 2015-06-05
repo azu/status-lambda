@@ -37,7 +37,8 @@ function uploadS3(bucketName, params) {
 }
 
 exports.handler = function (event, context) {
-    getURL("http://httpbin.org/get").then(function (response) {
+    var time = Date.now();
+    getURL("http://httpbin.org/get?" + time).then(function (response) {
         return uploadS3("lambda2rest", {
             key: "status.json",
             body: JSON.stringify(response)
