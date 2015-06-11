@@ -1,6 +1,7 @@
 // LICENSE : MIT
 "use strict";
 var AWS = require("aws-sdk");
+AWS.config.region = 'us-west-2';
 var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 var Promise = require("es6-promise").Promise;
 
@@ -49,7 +50,7 @@ function createQueue(queueName) {
         };
         sqs.createQueue(params, function (err, data) {
             if (err) {
-                reject(err);
+                return reject(err);
             }
             resolve(data.QueueUrl);
         });
@@ -59,3 +60,9 @@ function createQueue(queueName) {
 module.exports = {
     sendMessageEvery: sendMessageEvery
 };
+
+sendMessageEvery(30).then(function(res){
+    console.log(res);
+}).catch(function(error){
+    console.error(error.stack);
+});
