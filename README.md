@@ -64,7 +64,7 @@
 
 #### ループの開始(Start.lambda)
 
-- SQSのキューにメッセージを1分ごとのdelayをつけて数個置く
+- SQSのキューにメッセージを1分ごとのdelayをつけて数個置く＊1
     - delayのタイミングでループ関数が実行されるようにする
     - キューは15分までしか遅延できないので、
     - SQSからSNSを購読
@@ -74,18 +74,25 @@
 #### ループ関数の実行(Update.lambda)
 
 - SQSのキューが空ならば何も処理しない
+    - [ ] SQSに障害起きて、メッセージが止まってる時の挙動?
 - 前回の実行時間をUpdate.jsonから得て、30秒以上経過してるなら
     - ループの処理(リソースの取得、S3への保存)を行う
 - SQSで現在時間よりも前のメッセージを削除する
 - Update.jsonを更新して実行した時間を入れる
 - Loop.lockファイルがないなら
-    - SQSのキューにメッセージを1分ごとのdelayをつけて数個置く
+    - 後のメッセージの1分後に続くようにメッセージを追加していく
+    - SQSのキューにメッセージを1分ごとのdelayをつけて数個置く*1
+
+＊1 同じ処理
 
 #### ループの停止(Stop.lambda)
 
 - Look.lockファイルを作成する
 - SQSのpurgeQueueを呼び、キューの中のメッセージを空にする
 - [Class: AWS.SQS — AWS SDK for JavaScript](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#purgeQueue-property "Class: AWS.SQS — AWS SDK for JavaScript")
+
+
+Look.lockは続きのキューを追加しないためのロックファイル(つまりキューが増えないのでループがとまる)
 
 -----
 
